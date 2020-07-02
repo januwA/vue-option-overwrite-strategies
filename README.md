@@ -2,30 +2,11 @@
 
 > 如果覆写了钩子，那么必须使用`this.$$super.<hook name>()`手动触发(如果你需要的话)
 
-> 如果没有覆写那么会自动执行继承的钩子，就和vue自带的一样
+> 如果没有覆写那么会自动执行继承的钩子，就和vue自带的合并策略一样
 
 ## Install
 ```
 npm i vue-option-overwrite-strategies
-```
-
-## 使用
-```
-import App from "./app.vue";
-import { optionOverwriteStrategies } from "vue-option-overwrite-strategies";
-
-// 处理全部
-optionOverwriteStrategies(Vue.config.optionMergeStrategies);
-
-// 只处理mounted
-optionOverwriteStrategies(Vue.config.optionMergeStrategies, {
-  includes: ['mounted']
-});
-
-// 不处理mounted
-optionOverwriteStrategies(Vue.config.optionMergeStrategies, {
-  excludes: ['mounted']
-});
 ```
 
 ## Example
@@ -34,7 +15,9 @@ optionOverwriteStrategies(Vue.config.optionMergeStrategies, {
 ```
 import App from "./app.vue";
 import { optionOverwriteStrategies } from "vue-option-overwrite-strategies";
-optionOverwriteStrategies(Vue.config.optionMergeStrategies);
+
+// 将mounted改为覆写策略
+optionOverwriteStrategies(Vue.config.optionMergeStrategies, ['mounted']);
 ```
 
 2. 组件

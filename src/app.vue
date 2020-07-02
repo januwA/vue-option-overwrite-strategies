@@ -14,7 +14,7 @@ export default {
   },
   mounted() {
     console.log('widget mounted');
-    this.$$super.mounted()
+    // this.$$super.mounted()
   }
 };
 </script>

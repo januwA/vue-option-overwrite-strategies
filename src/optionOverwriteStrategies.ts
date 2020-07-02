@@ -1,62 +1,4 @@
-/**
- * uniapp函数钩子
- */
-const UNIAPP_HOOKS = [
-  "onLaunch",
-  "onShow",
-  "onHide",
-  "onError",
-  "onUniNViewMessage",
-  "onLoad",
-  "onShow",
-  "onReady",
-  "onHide",
-  "onUnload",
-  "onResize",
-  "onPullDownRefresh",
-  "onReachBottom",
-  "onTabItemTap",
-  "onShareAppMessage",
-  "onPageScroll",
-  "onNavigationBarButtonTap",
-  "onBackPress",
-  "onNavigationBarSearchInputChanged",
-  "onNavigationBarSearchInputConfirmed",
-  "onNavigationBarSearchInputClicked",
-];
-
-/**
- * 默认只处理这些钩子
- * https://cn.vuejs.org/v2/api/#%E9%80%89%E9%A1%B9-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E9%92%A9%E5%AD%90
- */
-const DEFAULT_INCLUDES = [
-  "beforeCreate",
-  "created",
-  "beforeMount",
-  "mounted",
-  "beforeUpdate",
-  "updated",
-  "activated",
-  "deactivated",
-  "beforeDestroy",
-  "destroyed",
-  "errorCaptured",
-  ...UNIAPP_HOOKS,
-];
-
 const SUPER_OPTION_NAME = "$$super";
-
-export interface Icfg {
-  /**
-   * 处理指定钩子
-   */
-  includes?: string[];
-
-  /**
-   * 跳过处理指定钩子
-   */
-  excludes?: string[];
-}
 
 export interface IoptionMergeStrategiesItem {
   (...args: any[]): any;
@@ -77,43 +19,25 @@ function dedupeHooks(hooks: Function | Function[]) {
   return res;
 }
 
-/**
- * 选项覆盖策略
- * 将vue的合并策略改为覆盖策略
- */
+ /**
+  * 将[includes]中的钩子从合并策略改为覆盖策略
+  * @param optionMergeStrategies Vue.config.optionMergeStrategies
+  * @param includes 需要修改的钩子，有些钩子无法处理
+  */
 export function optionOverwriteStrategies(
   optionMergeStrategies: IoptionMergeStrategies,
-  cfg?: Icfg
+  includes: string[]
 ): void {
-  const { includes = [], excludes = [] } = cfg ?? {};
-  if (includes.length && excludes.length) {
-    throw new Error("includes和excludes不能同时存在.");
-  }
-  const lifecycleHooks: string[] = handleIncludes(
-    optionMergeStrategies,
-    DEFAULT_INCLUDES
-  );
+  if (!includes.length) return;
 
-  // 指定处理
-  if (includes.length) {
-    return lifecycleHooks
-      .filter((it) => includes.includes(it))
-      .forEach((it) => handleOverwrite(optionMergeStrategies, it));
-  }
+  // 只处理指定的钩子，如果不能能处理自动抛出错误
+  // !通常只能处理函数钩子
 
-  // 指定跳过
-  if (excludes.length) {
-    return lifecycleHooks
-      .filter((it) => !excludes.includes(it))
-      .forEach((it) => handleOverwrite(optionMergeStrategies, it));
-  }
-
-  // 处理全部
-  const isHandleAll = !excludes.length && !includes.length;
-  if (isHandleAll) {
-    return lifecycleHooks.forEach((it) =>
-      handleOverwrite(optionMergeStrategies, it)
-    );
+  for (const hHook of includes) {
+    // 提供了无效的hook直接跳过
+    if (hHook in optionMergeStrategies) {
+      handleOverwrite(optionMergeStrategies, hHook);
+    }
   }
 
   optionMergeStrategies[SUPER_OPTION_NAME] = function (
@@ -122,29 +46,6 @@ export function optionOverwriteStrategies(
   ) {
     return val;
   };
-}
-
-/**
- * 不要excludes相关的
- * @param optionMergeStrategies
- * @param excludes
- */
-export function handleExcludes(
-  optionMergeStrategies: IoptionMergeStrategies,
-  excludes: string[]
-): string[] {
-  return Object.keys(optionMergeStrategies).filter(
-    (it) => !excludes.includes(it)
-  );
-}
-
-export function handleIncludes(
-  optionMergeStrategies: IoptionMergeStrategies,
-  includes: string[]
-) {
-  return Object.keys(optionMergeStrategies).filter((it) =>
-    includes.includes(it)
-  );
 }
 
 /**
