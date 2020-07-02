@@ -1,0 +1,27 @@
+{
+  "name": "vue-option-overwrite-strategies",
+  "version": "0.1.0",
+  "description": "将vue的合并策略改为覆写策略",
+  "main": "./vue-option-overwrite-strategies.js",
+  "types": "./optionOverwriteStrategies.d.ts",
+  "scripts": {
+    "build": "webpack --config __config__/webpack/prod.config.js",
+    "watch": "webpack --config __config__/webpack/dev.config.js --watch",
+    "start": "node __config__/webpack/dev-server.js",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.vue\"",
+    "test": "jest"
+  },
+  "keywords": [
+    "Ajanuw",
+    "vue",
+    "vue-option-overwrite-strategies",
+    "vue覆写策略"
+  ],
+  "author": "Ajanuw",
+  "license": "MIT",
+  "homepage": "https://github.com/januwA/vue-option-overwrite-strategies",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/januwA/vue-option-overwrite-strategies.git"
+  }
+}
