@@ -1,6 +1,6 @@
 {
   "name": "vue-option-overwrite-strategies",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "将vue的合并策略改为覆写策略",
   "main": "./vue-option-overwrite-strategies.js",
   "types": "./optionOverwriteStrategies.d.ts",

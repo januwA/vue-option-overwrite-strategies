@@ -1,4 +1,31 @@
 /**
+ * uniapp函数钩子
+ */
+const UNIAPP_HOOKS = [
+  "onLaunch",
+  "onShow",
+  "onHide",
+  "onError",
+  "onUniNViewMessage",
+  "onLoad",
+  "onShow",
+  "onReady",
+  "onHide",
+  "onUnload",
+  "onResize",
+  "onPullDownRefresh",
+  "onReachBottom",
+  "onTabItemTap",
+  "onShareAppMessage",
+  "onPageScroll",
+  "onNavigationBarButtonTap",
+  "onBackPress",
+  "onNavigationBarSearchInputChanged",
+  "onNavigationBarSearchInputConfirmed",
+  "onNavigationBarSearchInputClicked",
+];
+
+/**
  * 默认只处理这些钩子
  * https://cn.vuejs.org/v2/api/#%E9%80%89%E9%A1%B9-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E9%92%A9%E5%AD%90
  */
@@ -14,6 +41,7 @@ const DEFAULT_INCLUDES = [
   "beforeDestroy",
   "destroyed",
   "errorCaptured",
+  ...UNIAPP_HOOKS,
 ];
 
 const SUPER_OPTION_NAME = "$$super";
@@ -88,7 +116,10 @@ export function optionOverwriteStrategies(
     );
   }
 
-  optionMergeStrategies.$$super = function (superVal: any, val: any) {
+  optionMergeStrategies[SUPER_OPTION_NAME] = function (
+    superVal: any,
+    val: any
+  ) {
     return val;
   };
 }
@@ -150,14 +181,13 @@ export function handleOverwrite(
       const isOverwrite = cache[superLength - 1] !== cache[superLength - 2];
       cache.pop();
       if (!isOverwrite) cache.pop();
-      if (!this.$$super) this.$$super = {};
-      this.$$super[hookName] = () => {
+      if (!this[SUPER_OPTION_NAME]) this[SUPER_OPTION_NAME] = {};
+      this[SUPER_OPTION_NAME][hookName] = () => {
         cache.forEach((superHook) => {
-          // console.log(superHook);
           superHook.call(this);
         });
       };
-      if (!isOverwrite) this.$$super[hookName]();
+      if (!isOverwrite) this[SUPER_OPTION_NAME][hookName]();
     };
 
     return [first, last];

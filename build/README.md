@@ -4,6 +4,11 @@
 
 > 如果没有覆写那么会自动执行继承的钩子，就和vue自带的一样
 
+## Install
+```
+npm i vue-option-overwrite-strategies
+```
+
 ## 使用
 ```
 import App from "./app.vue";
