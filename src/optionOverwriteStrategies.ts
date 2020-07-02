@@ -19,16 +19,16 @@ function dedupeHooks(hooks: Function | Function[]) {
   return res;
 }
 
- /**
-  * 将[includes]中的钩子从合并策略改为覆盖策略
-  * @param optionMergeStrategies Vue.config.optionMergeStrategies
-  * @param includes 需要修改的钩子，有些钩子无法处理
-  */
+/**
+ * 将[includes]中的钩子从合并策略改为覆盖策略
+ * @param optionMergeStrategies Vue.config.optionMergeStrategies
+ * @param includes 需要修改的钩子，有些钩子无法处理
+ */
 export function optionOverwriteStrategies(
   optionMergeStrategies: IoptionMergeStrategies,
   includes: string[]
 ): void {
-  if (!includes.length) return;
+  if (!Array.isArray(includes) || !includes.length) return;
 
   // 只处理指定的钩子，如果不能能处理自动抛出错误
   // !通常只能处理函数钩子
@@ -44,6 +44,7 @@ export function optionOverwriteStrategies(
     superVal: any,
     val: any
   ) {
+    console.log(SUPER_OPTION_NAME);
     return val;
   };
 }
@@ -67,6 +68,8 @@ export function handleOverwrite(
         res = Array.isArray(val) ? val : [val];
       }
     } else {
+      // 不存在
+      superValues.pop()
       res = superValues;
     }
     const result: any[] = res ? dedupeHooks(res) : res;

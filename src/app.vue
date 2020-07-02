@@ -12,9 +12,9 @@ export default {
       name: 'app'
     };
   },
-  mounted() {
-    console.log('widget mounted');
-    // this.$$super.mounted()
+  created() {
+    this.$$super.created();
+    console.log('created');
   }
 };
 </script>
