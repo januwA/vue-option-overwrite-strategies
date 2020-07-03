@@ -14,10 +14,9 @@ npm i vue-option-overwrite-strategies
 1. main.js中使用
 ```
 import App from "./app.vue";
-import { optionOverwriteStrategies } from "vue-option-overwrite-strategies";
+import { OptionOverwriteStrategies } from "vue-option-overwrite-strategies";
 
-// 将mounted改为覆写策略
-optionOverwriteStrategies(Vue.config.optionMergeStrategies, ['mounted']);
+Vue.use(OptionOverwriteStrategies, ["created"]);
 ```
 
 2. 组件

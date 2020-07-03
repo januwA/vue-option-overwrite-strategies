@@ -1,6 +1,6 @@
 {
   "name": "vue-option-overwrite-strategies",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "将vue的合并策略改为覆写策略",
   "private": true,
   "main": "./src/index.ts",
@@ -50,6 +50,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vue-router": "^3.3.4"
   }
 }
